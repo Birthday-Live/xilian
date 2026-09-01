@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>昔涟 · 往昔的涟漪 | 崩坏：星穹铁道</title>
+<style>
+  :root{
+    --bg:#0a0619; --card:rgba(255,255,255,.07); --card2:rgba(255,255,255,.045);
+    --pink:#ff9ecb; --purple:#c88fff; --blue:#7fc9ff; --gold:#f4cf87;
+    --txt:#e6d8f5; --muted:#9a86c9; --soft:#c8b7e8;
+    --pad:clamp(16px,4vw,48px);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--txt)}
+  body{font-family:'Noto Serif SC','Source Han Serif SC',serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .stage{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:clamp(16px,4vw,44px) var(--pad) 60px}
+
+  /* 标题 */
+  .topline{text-align:center;margin-bottom:clamp(16px,3vw,30px)}
+  .topline .game{font-size:clamp(13px,2vw,17px);letter-spacing:.4em;color:var(--muted)}
+  .topline .sub{font-size:10px;letter-spacing:.32em;color:#766390;margin-top:6px;font-family:Georgia,serif}
+
+  /* HERO */
+  .hero{display:grid;gap:clamp(18px,4vw,40px);align-items:center}
+  @media(min-width:860px){.hero{grid-template-columns:minmax(0,42fr) minmax(0,58fr)}}
+  .hero-img{position:relative;border-radius:clamp(16px,3vw,24px);overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5);
+            border:1px solid rgba(255,255,255,.14)}
+  .hero-img svg{display:block;width:100%;height:auto;aspect-ratio:452/620}
+  @media(max-width:859px){.hero-img svg{aspect-ratio:4/3;max-height:46vh;height:auto}}
+  .hero-tag{position:absolute;left:0;right:0;bottom:0;padding:22px;background:linear-gradient(0deg,rgba(10,6,25,.9),transparent)}
+
+  .hero-txt h1{font-size:clamp(58px,11vw,116px);font-weight:700;margin:.05em 0 0;line-height:1.05;letter-spacing:.06em;
+               background:linear-gradient(180deg,#fff,#ffd6ea 55%,#ff9ecb);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero-txt .en{font-family:Georgia,serif;color:var(--pink);letter-spacing:.28em;font-size:clamp(15px,3vw,26px);margin-top:2px}
+  .hero-txt .rp{color:var(--purple);letter-spacing:.18em;font-size:clamp(12px,2.4vw,17px);margin-top:10px}
+  .divider{height:2px;background:linear-gradient(90deg,var(--pink),var(--purple),var(--blue));border-radius:2px;margin:16px 0;max-width:340px}
+
+  .tags{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 18px}
+  .tag{padding:7px 18px;border-radius:20px;font-size:clamp(13px,2vw,16px);background:rgba(42,26,72,.9)}
+  .tag.b{border:1px solid var(--blue);color:#9cd4ff}
+  .tag.p{border:1px solid var(--pink);color:#ffc6e0}
+  .tag.g{border:1px solid var(--gold);color:var(--gold)}
+
+  .intro{font-size:clamp(15px,2.5vw,19px);line-height:1.9;color:var(--txt);margin:0 0 14px}
+  .intro b{color:var(--pink);font-weight:600}
+  .fate{color:#8a7fb0;font-size:clamp(12px,2vw,15px);margin-top:18px}
+  .fate em{display:block;color:var(--pink);font-style:normal;margin-top:8px;letter-spacing:.06em}
+
+  /* 区块标题 */
+  .sechead{text-align:center;margin:clamp(34px,6vw,58px) 0 6px}
+  .sechead h2{font-size:clamp(24px,5vw,32px);letter-spacing:.5em;font-weight:600;color:var(--pink);margin:0}
+  .sechead p{font-family:Georgia,serif;font-size:11px;letter-spacing:.3em;color:#766390;margin:8px 0 0}
+  .sechline{width:120px;height:2px;margin:14px auto 0;background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+
+  /* 形态卡 */
+  .forms{display:grid;gap:clamp(14px,2.6vw,24px);grid-template-columns:1fr}
+  @media(min-width:640px){.forms{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:960px){.forms{grid-template-columns:repeat(3,1fr)}}
+  .form{background:var(--card);border:1px solid rgba(200,143,255,.35);border-radius:clamp(16px,3vw,22px);
+        overflow:hidden;transition:.35s ease}
+  .form .imgbox{position:relative}
+  .form .imgbox svg{display:block;width:100%;aspect-ratio:1/1}
+  .form .label{padding:16px 18px 18px}
+  .form .label h3{margin:0;font-size:clamp(18px,3vw,22px);font-weight:600;color:#fff}
+  .form .label span{font-family:Georgia,serif;font-size:12px;letter-spacing:.2em;color:var(--muted)}
+  .form .label p{margin:8px 0 0;font-size:clamp(12px,2vw,14px);line-height:1.7;color:var(--soft)}
+  .form:hover{transform:translateY(-6px);border-color:var(--pink);box-shadow:0 16px 40px rgba(255,120,180,.18)}
+
+  /* 资料卡 */
+  .info{background:var(--card);border:1px solid rgba(200,143,255,.3);border-radius:clamp(16px,3vw,24px);padding:clamp(18px,3.4vw,30px)}
+  .info h3{margin:0 0 14px;font-size:clamp(18px,3vw,22px);letter-spacing:.3em;color:var(--pink);font-weight:600}
+  .info .grid{display:grid;gap:12px 24px}
+  @media(min-width:700px){.info .grid{grid-template-columns:1fr 1fr}}
+  .info .row{display:flex;gap:12px;font-size:clamp(13px,2.2vw,16px);line-height:1.6}
+  .info .k{color:var(--muted);min-width:72px;flex:none}
+  .info .v{color:#fff}
+  .info .v.p{color:var(--pink)}
+  .info .aliases{margin-top:14px;padding-top:14px;border-top:1px dashed rgba(200,143,255,.25);color:var(--soft);font-size:clamp(12px,2vw,15px);line-height:1.9}
+
+  /* 台词 */
+  .quote{text-align:center;background:var(--card);border:1px solid rgba(255,158,203,.3);border-radius:clamp(16px,3vw,24px);padding:clamp(26px,5vw,44px)}
+  .quote .note{font-size:clamp(22px,4vw,30px);color:var(--pink);letter-spacing:.4em}
+  .quote p{margin:12px 0 0;font-size:clamp(16px,3vw,22px);color:#fff;line-height:1.9;font-weight:500}
+  .quote .en{margin-top:14px;font-family:Georgia,serif;font-size:13px;letter-spacing:.16em;color:var(--muted)}
+
+  /* 倒计时 */
+  .count{text-align:center;background:var(--card2);border:1px solid rgba(200,143,255,.3);border-radius:clamp(16px,3vw,24px);padding:clamp(24px,4.5vw,40px)}
+  .count .ttl{font-size:clamp(18px,3.4vw,24px);color:var(--pink);letter-spacing:.3em}
+  .count .sub2{font-size:clamp(12px,2vw,15px);color:var(--muted);margin-top:8px;letter-spacing:.12em}
+  .clock{display:flex;justify-content:center;align-items:flex-end;gap:clamp(6px,2vw,16px);margin:clamp(20px,4vw,34px) 0 4px}
+  .unit{min-width:clamp(52px,13vw,86px)}
+  .box{background:rgba(47,28,82,.9);border:1px solid #8f74c4;border-radius:16px;padding:clamp(8px,2vw,14px) 0;
+       font-family:Georgia,serif;font-weight:700;font-size:clamp(38px,11vw,60px);color:#fff;line-height:1}
+  .unit .lb{margin-top:8px;color:var(--soft);font-size:clamp(12px,2vw,14px)}
+  .col{font-family:Georgia,serif;color:#7a5fb0;font-size:clamp(28px,8vw,44px);line-height:1;padding-bottom:clamp(18px,5vw,40px)}
+  .count .foot{margin-top:16px;color:#a994d6;font-size:clamp(12px,2vw,15px);letter-spacing:.08em}
+
+  /* 页脚 */
+  footer{text-align:center;margin-top:clamp(40px,7vw,64px)}
+  footer .fl{width:min(240px,60%);height:1px;background:linear-gradient(90deg,transparent,#57437f,transparent);margin:0 auto 18px}
+  footer .f1{font-size:clamp(15px,2.4vw,19px);letter-spacing:.14em;color:var(--soft)}
+  footer .f2{margin-top:8px;font-family:Georgia,serif;font-size:12px;letter-spacing:.24em;color:#766390}
+  .srcnote{text-align:center;color:#5f5183;font-size:11px;margin-top:26px;line-height:1.8}
+
+  /* 滚动渐现 */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ============ 到点庆祝 ============ */
+  .fx{position:fixed;inset:0;z-index:5;pointer-events:none;display:none}
+  .fx.show{display:block}
+  body.party{background:radial-gradient(1200px 760px at 50% 28%,#3d1750,#0a0619 72%)}
+  body.party .hero-img{border-color:var(--pink);box-shadow:0 0 50px rgba(255,140,190,.35)}
+  .count .msg{display:none;padding-top:6px}
+  .count .msg .b11{font-size:clamp(46px,13vw,96px);font-weight:700;letter-spacing:.06em;line-height:1;
+    background:linear-gradient(180deg,#fff,#ffd6ea 55%,#ff9ecb);-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:pulse 1.6s ease-in-out infinite}
+  .count .msg .wish{margin-top:14px;font-size:clamp(17px,3.2vw,22px);color:var(--pink);letter-spacing:.22em;font-weight:600}
+  .count .msg .greet{margin-top:14px;font-size:clamp(15px,2.8vw,21px);color:#fff;letter-spacing:.12em}
+  .count .msg .bless{margin-top:16px;font-size:clamp(12px,2.2vw,15px);color:var(--muted);letter-spacing:.1em}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+
+  /* ============ 隐藏彩蛋按钮 + 弹窗 ============ */
+  #secret{position:fixed;right:22px;bottom:20px;width:46px;height:46px;border-radius:50%;
+    background:rgba(255,158,203,.1);border:1px solid rgba(255,158,203,.35);color:var(--pink);
+    font-size:18px;cursor:pointer;z-index:30;opacity:.55;transition:.3s;user-select:none}
+  #secret:hover{opacity:.9;transform:scale(1.1);box-shadow:0 0 18px rgba(255,150,190,.4)}
+  body.lock{overflow:hidden}
+  .modal{position:fixed;inset:0;background:rgba(5,3,16,.82);display:none;align-items:center;justify-content:center;
+    z-index:40;padding:20px;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+  .modal.open{display:flex}
+  .modal-card{position:relative;max-width:520px;width:100%;background:linear-gradient(160deg,#2b1650,#170d32);
+    border:1px solid var(--pink);border-radius:20px;padding:22px 22px 28px;text-align:center;
+    box-shadow:0 30px 90px rgba(0,0,0,.6);animation:pop .5s cubic-bezier(.2,.9,.3,1.2)}
+  .modal-card img{width:100%;border-radius:12px;border:1px solid rgba(255,255,255,.12);display:block}
+  .modal-q{margin:22px 0 4px;color:#fff;font-size:clamp(15px,3vw,19px);line-height:1.95;letter-spacing:.04em}
+  .modal-note{margin-top:8px;color:var(--muted);font-size:13px;letter-spacing:.12em}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;color:#c8b7e8;font-size:26px;line-height:1;cursor:pointer}
+  .modal-close:hover{color:#fff}
+  @keyframes pop{from{opacity:0;transform:scale(.9) translateY(12px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- 背景动画 SVG（JS 驱动） -->
+<svg class="stage" viewBox="0 0 1200 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <radialGradient id="glowA" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ff9fcd" stop-opacity=".45"/>
+      <stop offset=".6" stop-color="#b06cff" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#b06cff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <ellipse id="g1" cx="600" cy="430" rx="520" ry="520" fill="url(#glowA)"/>
+  <ellipse id="g2" cx="180" cy="820" rx="420" ry="420" fill="url(#glowA)" opacity=".4"/>
+  <g id="ripples" fill="none" stroke="#c99cf0" stroke-opacity=".4">
+    <circle id="r1" cx="600" cy="430" r="60"/>
+    <circle id="r2" cx="600" cy="430" r="120"/>
+    <circle id="r3" cx="600" cy="430" r="180"/>
+  </g>
+  <g id="puffs" fill="#fff"></g>
+</svg>
+
+<!-- 到点庆祝粒子层（JS 驱动） -->
+<svg class="fx" id="fx" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g id="confetti"></g>
+</svg>
+
+<div class="wrap">
+
+  <header class="topline reveal">
+    <div class="game">崩坏 · 星穹铁道</div>
+    <div class="sub">HO N K A I · S TA R · R A I L</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero reveal">
+    <div class="hero-img">
+      <svg viewBox="0 0 452 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="cHero"><rect x="0" y="0" width="452" height="620" rx="0"/></clipPath></defs>
+        <g clip-path="url(#cHero)">
+          <image href="https://bkimg.cdn.bcebos.com/pic/ac4bd11373f082025aaf2edc07a0ecedab64024fad87?x-bce-process=image/resize,m_lfit,w_800,limit_1/quality,Q_85"
+                 x="0" y="0" width="452" height="620" preserveAspectRatio="xMidYMid slice"/>
+        </g>
+      </svg>
+      <div class="hero-tag">
+        <div style="color:var(--pink);font-size:12px;letter-spacing:.3em;font-family:Georgia,serif">CYRENE</div>
+        <div style="color:#fff;font-size:clamp(15px,2.6vw,20px);margin-top:6px;letter-spacing:.1em">往昔的涟漪</div>
+      </div>
+    </div>
+
+    <div class="hero-txt">
+      <h1>昔涟</h1>
+      <div class="en">C Y R E N E</div>
+      <div class="rp">Ripples of Past Reverie</div>
+      <div class="divider"></div>
+      <div class="tags">
+        <span class="tag b">冰</span>
+        <span class="tag p">记忆</span>
+        <span class="tag g">爱</span>
+      </div>
+      <p class="intro">
+        最初的智种 · 无名的<b>第十三位泰坦</b>。她以三千万世轮回的记忆，
+        为翁法罗斯写下逐火的史诗。粉色的发、湛蓝的心、<b>哀怜与爱</b>，
+        是她行走「记忆」命途的原动力。
+      </p>
+      <div class="fate">
+        神谕 ·「汝将收梢于花开时，一如终结诞下起始」
+        <em>「要一直记得这一天呀，伙伴。……然后，就拥抱昨天的明天吧。♪」</em>
+      </div>
+    </div>
+  </section>
+
+  <!-- 形态 -->
+  <div class="sechead reveal">
+    <h2>她 的 形 态</h2>
+    <p>MEM · CYRENE · DEMIURGE</p>
+    <div class="sechline"></div>
+  </div>
+
+  <div class="forms">
+    <div class="form reveal">
+      <div class="imgbox">
+        <svg viewBox="0 0 320 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="c1"><rect x="0" y="0" width="320" height="320"/></clipPath></defs>
+          <g clip-path="url(#c1)">
+            <image href="https://bkimg.cdn.bcebos.com/pic/3801213fb80e7bec54e7475cda75ae389b504fc23d40?x-bce-process=image/resize,m_lfit,w_640,limit_1/quality,Q_85"
+                   x="0" y="0" width="320" height="320" preserveAspectRatio="xMidYMid slice"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label"><h3>迷迷</h3><span>M E M</span>
+        <p>粉色的忆灵小妖精，逐火之旅的旅伴，只会发出「迷迷」的叫声。</p></div>
+    </div>
+
+    <div class="form reveal">
+      <div class="imgbox">
+        <svg viewBox="0 0 320 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="c2"><rect x="0" y="0" width="320" height="320"/></clipPath></defs>
+          <g clip-path="url(#c2)">
+            <image href="https://bkimg.cdn.bcebos.com/pic/2e2eb9389b504fc2d562f2b81086f01190ef76c6c740?x-bce-process=image/resize,m_lfit,w_640,limit_1/quality,Q_85"
+                   x="0" y="0" width="320" height="320" preserveAspectRatio="xMidYMid slice"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label"><h3>小昔涟</h3><span>Y O U N G</span>
+        <p>哀丽秘榭的占卜少女，以神谕牌为白厄指引救世的未来。</p></div>
+    </div>
+
+    <div class="form reveal">
+      <div class="imgbox">
+        <svg viewBox="0 0 320 320" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="c3"><rect x="0" y="0" width="320" height="320"/></clipPath></defs>
+          <g clip-path="url(#c3)">
+            <image href="https://bkimg.cdn.bcebos.com/pic/8cb1cb1349540923dd54f81c4803c609b3de9c82e307?x-bce-process=image/resize,m_lfit,w_640,limit_1/quality,Q_85"
+                   x="0" y="0" width="320" height="320" preserveAspectRatio="xMidYMid slice"/>
+          </g>
+        </svg>
+      </div>
+      <div class="label"><h3>德谬歌</h3><span>D E M I U R G E</span>
+        <p>集结三千万世记忆的「无漏净子」· 翁法罗斯之心 · 创世之泰坦。</p></div>
+    </div>
+  </div>
+
+  <!-- 资料 -->
+  <section class="info reveal" style="margin-top:clamp(24px,4vw,40px)">
+    <h3>角 色 资 料</h3>
+    <div class="grid">
+      <div class="row"><span class="k">中文名</span><span class="v">昔涟</span></div>
+      <div class="row"><span class="k">外文名</span><span class="v">Cyrene</span></div>
+      <div class="row"><span class="k">属性</span><span class="v">冰</span></div>
+      <div class="row"><span class="k">命途</span><span class="v">记忆</span></div>
+      <div class="row"><span class="k">原动力</span><span class="v">哀怜 / 爱</span></div>
+      <div class="row"><span class="k">性别</span><span class="v">女</span></div>
+      <div class="row"><span class="k">神权</span><span class="v">永夜之帷（岁月）／翁法罗斯之心（创世）</span></div>
+      <div class="row"><span class="k">所属</span><span class="v">无名泰坦大墓 ∞ 哀丽秘榭</span></div>
+      <div class="row"><span class="k">实装</span><span class="v">2025 · 11 · 05</span></div>
+      <div class="row"><span class="k">配音</span><span class="v">宴宁 · 井上麻里奈</span></div>
+    </div>
+    <div class="aliases">别名：<span style="color:#ffd3e6">德谬歌 · 迷迷 · 往昔的涟漪 · 无瑕的真我 · 翁法罗斯之心 · 小涟 · 创世之泰坦 · PhiLia093</span></div>
+  </section>
+
+  <!-- 台词 -->
+  <section class="quote reveal" style="margin-top:clamp(24px,4vw,40px)">
+    <div class="note">♪</div>
+    <p>「当然，这一定是个不同以往的浪漫故事，<br>你也是这么想，对吧？♪」</p>
+    <div class="en">"Of course — this must be a romance like no other, right? ♪"</div>
+  </section>
+
+  <!-- 倒计时 -->
+  <section class="count reveal" style="margin-top:clamp(24px,4vw,40px)">
+    <div class="ttl">11 月 12 日 · 昔涟的纪念日</div>
+    <div class="sub2">距离 2026 · 11 · 12 13:00</div>
+    <div class="msg" id="msg">
+      <div class="b11">11 · 12</div>
+      <div class="wish">昔涟的纪念日，到啦！♪</div>
+      <div class="greet">「你好，世界 —— Hello World ♪」</div>
+      <div class="bless">愿往昔的涟漪，化作今天与你相拥的光。</div>
+    </div>
+    <div class="clock">
+      <div class="unit"><div class="box" id="cd_d">--</div><div class="lb">天</div></div>
+      <div class="col">:</div>
+      <div class="unit"><div class="box" id="cd_h">--</div><div class="lb">时</div></div>
+      <div class="col">:</div>
+      <div class="unit"><div class="box" id="cd_m">--</div><div class="lb">分</div></div>
+      <div class="col">:</div>
+      <div class="unit"><div class="box" id="cd_s">--</div><div class="lb">秒</div></div>
+    </div>
+    <div class="foot">愿往昔的涟漪，在此刻回应你 ♪</div>
+  </section>
+
+  <footer>
+    <div class="fl"></div>
+    <div class="f1">网站作者 · Grok ＆ 水喝千束 waterchisato</div>
+    <div class="f2">Ripples of Past Reverie · 献给昔涟 ♪</div>
+  </footer>
+  <div class="srcnote">角色与插画版权归 miHoYo 所有 · 图源：崩坏：星穹铁道 官方素材（百科收录）</div>
+</div>
+
+<!-- 隐藏彩蛋：点 10 下唤醒 -->
+<button id="secret" aria-label="♪" title="♪">♪</button>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="昔涟寄语">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose" aria-label="关闭">×</button>
+    <img src="https://chisatoimg.cc.cd/file/1788270528497_8435e5dde71190ef76c6dc8a38408a16fdfaaf51ca68-bkimg-process_v_1_rw_448_rh_252_maxl_896.webp" alt="昔涟 · 往昔的涟漪">
+    <p class="modal-q">“要一直记得这一天呀，伙伴。<br>然后……就拥抱昨天的明天吧。”</p>
+    <div class="modal-note">—— 昔涟 ♪</div>
+  </div>
+</div>
+
+<script>
+/* ============ 1. 倒计时 ============ */
+(function(){
+  var target=new Date(2026,10,12,13,0,0);
+  var d=document.getElementById('cd_d'),h=document.getElementById('cd_h'),
+      m=document.getElementById('cd_m'),s=document.getElementById('cd_s');
+  function p(n){return (n<10?'0':'')+n}
+  var celebrated=false;
+  function onCelebrate(){
+    if(celebrated)return; celebrated=true;
+    document.body.classList.add('party');
+    var clock=document.querySelector('.count .clock'), sub2=document.querySelector('.count .sub2');
+    if(clock)clock.style.display='none';
+    if(sub2)sub2.style.display='none';
+    var msg=document.getElementById('msg'); if(msg)msg.style.display='block';
+    if(window.__celebration) window.__celebration();
+  }
+  function tick(){var t=target-new Date();
+    if(t<=0){d.textContent=h.textContent=m.textContent=s.textContent='00';onCelebrate();return}
+    var sec=Math.floor(t/1000),dd=Math.floor(sec/86400);sec-=dd*86400;
+    var hh=Math.floor(sec/3600);sec-=hh*3600;var mm=Math.floor(sec/60);sec-=mm*60;
+    d.textContent=p(dd);h.textContent=p(hh);m.textContent=p(mm);s.textContent=p(sec)}
+  tick();setInterval(tick,1000);
+})();
+
+/* ============ 2. 滚动渐现 ============ */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(list){
+    list.forEach(function(it){if(it.isIntersecting){it.target.classList.add('in');io.unobserve(it.target)}})
+  },{threshold:.12});
+  els.forEach(function(e){io.observe(e)});
+})();
+
+/* ============ 3. 背景动画：漂浮粒子 + 涟漪 + 光晕脉动 ============ */
+(function(){
+  var stage=document.querySelector('.stage');
+  if(!stage) return;
+  var ns='http://www.w3.org/2000/svg';
+  // 生成粒子
+  var pf=document.getElementById('puffs'),P=[],N=26;
+  for(var i=0;i<N;i++){
+    var c=document.createElementNS(ns,'circle');
+    var s=(4+Math.random()*5);c.setAttribute('r',s);
+    var hue=Math.random();var col=hue<.5?'#ffc6e0':(hue<.8?'#c9a6ff':'#9ad4ff');
+    c.setAttribute('fill',col);c.setAttribute('opacity',(.35+Math.random()*.4).toFixed(2));
+    pf.appendChild(c);
+    P.push({el:c,x:Math.random(),y:Math.random(),sp:(.0006+Math.random()*.0012),
+            sw:(Math.random()*.0006-.0003),ph:Math.random()*6.28,r:s});
+  }
+  // 涟漪环
+  var R=[document.getElementById('r1'),document.getElementById('r2'),document.getElementById('r3')];
+  var glow1=document.getElementById('g1'),glow2=document.getElementById('g2');
+  var W=1200,H=900,t=0;
+  function loop(){
+    t+=.016;
+    // 粒子飘升 + 微摆 + 呼吸
+    for(var i=0;i<P.length;i++){
+      var p=P[i];
+      p.y-=(p.sp+ .0002*Math.sin(t+p.ph)); if(p.y<-0.05){p.y=1.05;p.x=Math.random()}
+      p.x+=(p.sw + .0001*Math.cos(t+p.ph)); if(p.x<-0.05)p.x=1.05; if(p.x>1.05)p.x=-0.05;
+      var rBase=p.r*(1+.15*Math.sin(t*1.4+p.ph));
+      p.el.setAttribute('cx',(p.x*W).toFixed(1));
+      p.el.setAttribute('cy',(p.y*H).toFixed(1));
+      p.el.setAttribute('r',rBase.toFixed(1));
+    }
+    // 涟漪扩散
+    for(var j=0;j<R.length;j++){
+      var base=[60,120,180][j];
+      var k=((t*40 + j*20) % 120);
+      R[j].setAttribute('r',(base+k).toFixed(1));
+      R[j].setAttribute('stroke-opacity',(.45*(1-k/120)).toFixed(2));
+    }
+    // 光晕呼吸
+    glow1.setAttribute('opacity',(.55+.25*Math.sin(t*1.3)).toFixed(2));
+    glow2.setAttribute('opacity',(.3+.2*Math.sin(t*1.1+1)).toFixed(2));
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ============ 4. 到点庆祝：玫瑰花瓣雨 · 爱心 · 星光 ============ */
+(function(){
+  var fx=document.getElementById('fx'), cg=document.getElementById('confetti');
+  if(!fx||!cg) return;
+  var ns='http://www.w3.org/2000/svg', W=1200, H=800, conf=[], run=false, celebrating=false;
+  var colors=['#ff9ecb','#ffc6e0','#d68cff','#9ad4ff','#f4cf87'];
+  function mk(type){
+    var el;
+    if(type==='petal'){
+      el=document.createElementNS(ns,'ellipse');
+      el.setAttribute('rx',15); el.setAttribute('ry',8.5);
+      el.setAttribute('fill',colors[(Math.random()*colors.length)|0]);
+    }else if(type==='heart'){
+      el=document.createElementNS(ns,'path');
+      el.setAttribute('d','M0 3.5c-3.6-4.5-11-2.8-11 2.7 0 4.6 5.4 7.3 11 11.8 5.6-4.5 11-7.2 11-11.8 0-5.5-7.4-7.2-11-2.7z');
+      el.setAttribute('fill',Math.random()<.5?'#ff9ecb':'#ffc6e0');
+    }else{ // spark
+      el=document.createElementNS(ns,'path');
+      el.setAttribute('d','M0 -7 L1.7 -1.7 L7 0 L1.7 1.7 L0 7 L-1.7 1.7 L-7 0 L-1.7 -1.7 Z');
+      el.setAttribute('fill',Math.random()<.6?'#ffe9b8':'#ffffff');
+    }
+    return el;
+  }
+  function add(x,y,type,opt){
+    opt=opt||{};
+    var el=mk(type); el.setAttribute('opacity',.9); cg.appendChild(el);
+    conf.push({el:el,type:type,baseX:x,y:y,
+      vy:(opt.vy!==undefined?opt.vy:(1.5+Math.random()*2.6)),
+      sway:(opt.sway!==undefined?opt.sway:(8+Math.random()*28)),
+      t:Math.random()*6.28, rot:(opt.rot!==undefined?opt.rot:Math.random()*360),
+      vr:(opt.vr!==undefined?opt.vr:(Math.random()*.5-.25)),
+      life:(opt.life!==undefined?opt.life:(170+Math.random()*130)),
+      spark:(type==='spark'), ph:Math.random()*6.28});
+  }
+  function burst(x,y){
+    for(var i=0;i<10;i++){var a=i/10*6.283;
+      add(x,y,(i%3===0?'spark':'petal'),{vy:Math.sin(a)*2.4,sway:Math.abs(Math.cos(a))*34,vr:Math.cos(a)*.7,life:120});}
+  }
+  function loop(){
+    if(!run)return;
+    if(celebrating){
+      if(conf.length<240){ for(var k=0;k<2;k++){add(Math.random()*W,-20);} if(Math.random()<.025) burst(Math.random()*W,Math.random()*H*.4); }
+    }
+    for(var i=conf.length-1;i>=0;i--){
+      var c=conf[i];
+      c.y+=c.vy; c.t+=.05; c.rot+=c.vr; c.life--;
+      var x=c.baseX+Math.sin(c.t)*c.sway;
+      if(c.spark){ c.ph+=.12; c.el.setAttribute('opacity',(0.35+0.55*Math.abs(Math.sin(c.ph*2))).toFixed(2)); }
+      c.el.setAttribute('transform','translate('+x.toFixed(1)+' '+c.y.toFixed(1)+') rotate('+c.rot.toFixed(1)+')');
+      if(c.y>H+30||c.life<=0){ try{cg.removeChild(c.el);}catch(e){} conf.splice(i,1); }
+    }
+    requestAnimationFrame(loop);
+  }
+  window.__celebration=function(){
+    celebrating=true; run=true; fx.classList.add('show');
+    burst(W*.5,H*.32); burst(W*.28,H*.5); burst(W*.72,H*.5);
+    requestAnimationFrame(loop);
+  };
+})();
+
+/* ============ 5. 隐藏彩蛋：点 10 下唤醒弹窗 ============ */
+(function(){
+  var btn=document.getElementById('secret'), modal=document.getElementById('modal'),
+      close=document.getElementById('modalClose'), n=0;
+  if(!btn||!modal) return;
+  function closeM(){ modal.classList.remove('open'); document.body.classList.remove('lock'); }
+  btn.addEventListener('click',function(){
+    n++;
+    if(n>=10){ modal.classList.add('open'); document.body.classList.add('lock'); }
+  });
+  if(close) close.addEventListener('click',closeM);
+  modal.addEventListener('click',function(e){ if(e.target===modal) closeM(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeM(); });
+})();
+</script>
+</body>
+</html>
